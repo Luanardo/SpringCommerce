@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment = "page(title, scripts)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title th:text="${title}"></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <!-- Brand/logo -->
+            <a class="navbar-brand" href="/">SpringCommerce</a>
+
+            <!-- Navbar items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav"> <!-- "ms-auto" class pushes items to the right -->
+                    <!-- User login item -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Sản phẩm</a>
+                    </li>
+
+                    <!-- Shopping cart item -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">Đơn hàng</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto"> <!-- "ms-auto" class pushes items to the right -->
+                    <span th:if="${email != null}" class="navbar-text me-3" th:text="${email}"></span>
+                    <!-- User login item -->
+                    <li th:if="${email != null}" class="nav-item me-3">
+                        <a class="nav-link" href="/logout"><i class="fa-solid fa-right-from-bracket fa-lg me-2"></i></i>Đăng xuất</a>
+                    </li>
+                    <li th:unless="${email != null}" class="nav-item me-3">
+                        <a class="nav-link" href="/login"><i class="fa-solid fa-right-to-bracket fa-lg me-2"></i>Đăng nhập</a>
+                    </li>
+
+                    <!-- Shopping cart item -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">
+                            <div class="position-relative">
+                                <div class="rounded-circle icon-container">
+                                    <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                                </div>
+                                <span class="badge bg-danger position-absolute bottom-0 end-0" id="cartQuantity" th:text="${cartQuantity}"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section>
+    <div th:replace="~{this :: content}"></div>
+</section>
+
+<footer>
+    <div class="container">&copy; 2023 SpringCommerce</div>
+</footer>
+
+<script th:src="@{/js/script.js}"></script>
+<th:block th:if = "${scripts}">
+    <script th:each="jsFile : ${scripts}"  th:src="@{'/js/' + ${jsFile}}"></script>
+</th:block>
+
+</body>
+</html>

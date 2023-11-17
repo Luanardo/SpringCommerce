@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/default_layout :: page(title=${title}, scripts=${scripts})}">
+>
+<head>
+
+</head>
+<body>
+<div th:fragment="content">
+    <!-- Product Filter -->
+    <div class="container mt-3 d-flex gap-2 justify-content-between align-items-center">
+        <div class="input-group w-auto align-items-center">
+            <i class="fa-solid fa-filter fa-lg me-2"></i>Bộ lọc
+        </div>
+
+        <div class="input-group w-auto">
+            <span class="input-group-text">Cấp độ</span>
+            <select id="grade" class="form-select" aria-label="Default select example">
+                <option value="All">Tất cả</option>
+                <option value="SD">SD</option>
+                <option value="HG">HG</option>
+                <option value="RG">RG</option>
+                <option value="MG">MG</option>
+                <option value="PG">PG</option>
+            </select>
+        </div>
+
+        <div class="input-group w-auto">
+            <span class="input-group-text">Giá</span>
+            <select id="price" class="form-select" aria-label="Default select example">
+                <option value="All">Tất cả</option>
+                <option value="0-200000">Dưới 200.000 đ</option>
+                <option value="200000-400000">200.000 đ - 400.000 đ</option>
+                <option value="400000-700000">400.000 đ - 700.000 đ</option>
+                <option value="700000-1000000">700.000 đ - 1.000.000 đ</option>
+                <option value="1000000-2000000">1.000.000 đ - 2.000.000 đ</option>
+                <option value="2000000-3000000">2.000.000 đ - 3.000.000 đ</option>
+                <option value="3000000-5000000">3.000.000 đ - 5.000.000 đ</option>
+                <option value="5000000">Trên 5.000.000 đ</option>
+            </select>
+        </div>
+
+        <div class="input-group w-50">
+            <input id="search" type="text" class="form-control" placeholder="Tìm theo tên sản phẩm">
+            <label for="search" class="btn btn-secondary"><i class="fas fa-search"></i></label>
+        </div>
+    </div>
+
+    <div class="container mt-3 mb-3">
+        <div class="row product-container">
+            <!-- Product Card 1 -->
+            <div th:each="product : ${products}" class="col-3 mb-4 product-card">
+                <a th:href="@{${product.id}}" class="card d-flex flex-column h-100 align-items-stretch">
+                    <div class="img-wrapper card-img-top img-fluid">
+                        <img th:src="@{'/public/productImages/'+${product.boxImage}}" class="first-image" alt="Product Image">
+                        <img th:src="@{'/public/productImages/'+${product.frontImage}}" class="second-image" alt="Product Image">
+                    </div>
+                    <div class="card-body flex-fill">
+                        <h5 class="card-title truncate-text" th:text="${product.name}"></h5>
+                        <p class="card-text text-danger"><span class="fw-bold" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

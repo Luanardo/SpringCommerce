@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/default_layout :: page(title=${title}, scripts=${scripts})}">
+>
+<head>
+
+</head>
+<body>
+<div class="container mt-3 mb-3" th:fragment="content">
+    <div class="row">
+        <div class="col-6">
+            <!-- <img src="3738192.jpg" class="first-image img-fluid" alt="Product Image"> -->
+            <div id="imageSlides" class="carousel carousel-dark slide">
+<!--                <div class="carousel-indicators">-->
+<!--                    <button type="button" data-bs-target="#imageSlides" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>-->
+<!--                    <button type="button" data-bs-target="#imageSlides" data-bs-slide-to="1" aria-label="Slide 2"></button>-->
+<!--                </div>-->
+                <div class="carousel-inner" style="height: 500px;">
+                    <div class="carousel-item active">
+                        <img th:src="@{'/public/productImages/'+${product.boxImage}}" class="d-block w-100 h-100" alt="Box art">
+                    </div>
+                    <div class="carousel-item">
+                        <img th:src="@{'/public/productImages/'+${product.frontImage}}" class="d-block w-100 h-100" alt="image">
+                    </div>
+                    <div class="carousel-item" th:each="image : ${product.imagePaths}">
+                        <img th:src="@{'/public/productImages/'+${image}}" class="d-block w-100 h-100" alt="image">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#imageSlides" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#imageSlides" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3 class="text-uppercase" th:text="${product.name}"></h3>
+            <h4 class="text-danger"><span class="fw-bold" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></h4>
+            <div class="d-flex mt-3 mb-4">
+                <div class="input-group me-2" style="width: 150px;">
+                    <button id="minusBtn" type="button" class="btn btn-secondary"><i class="fa-solid fa-minus"></i></button>
+                    <div id="quantity" class="form-control text-center">1</div>
+                    <button id="plusBtn" type="button" class="btn btn-secondary"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <button th:if="${product.remainingQuantity <= 0}" class="btn btn-outline-secondary disabled">Đã hết hàng</button>
+                <button th:unless="${product.remainingQuantity <= 0}" id="addCartBtn" class="btn btn-outline-danger">Thêm vào giỏ</button>
+            </div>
+            <h4>Thông tin sản phẩm</h4>
+            <div>
+                <table class="table">
+                    <tr>
+                        <th scope="row">Cấp độ</th><td th:text="${grade.name}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tỉ lệ</th><td th:text="${grade.ratio}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mô tả</th><td th:text="${product.description}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Đến từ phim</th><td th:text="${product.series}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Trang bị</th><td th:text="${product.equipments}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        $(function () {
+            $("#addCartBtn").click(function () {
+                const customerEmail = /*[[${email}]]*/ '';
+                if (customerEmail == null) {
+                    window.location.href = "/login";
+                    return;
+                }
+                const productId = /*[[${product.id}]]*/ '';
+                const quantity = $("#quantity").text();
+                const formData = new FormData();
+                formData.append("customer", customerEmail);
+                formData.append("product", productId);
+                formData.append("quantity", quantity);
+                fetch('/api/cart', {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(quantity => {
+                        let curQuantity = parseInt($("#cartQuantity").text());
+                        curQuantity = curQuantity + parseInt(quantity);
+                        $("#cartQuantity").text(curQuantity);
+                    })
+                    .catch(err => {
+                       console.log(err);
+                    });
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

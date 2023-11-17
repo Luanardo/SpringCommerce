@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/default_layout :: page(title=${title}, scripts=${scripts})}">
+>
+<head>
+
+</head>
+<body>
+<div class="container mt-3 mb-3" th:fragment="content">
+    <h2 class="text-center mb-5">Danh sách đơn hàng</h2>
+    <div>
+        <div th:each="order : ${orders}" class="card mb-4 p-4">
+            <table class="table">
+                <tr>
+                    <th scope="row">Ngày lập</th>
+                    <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Số điện thoại</th>
+                    <td th:text="${order.phoneNumber}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Địa chỉ nhận hàng</th>
+                    <td th:text="${order.address}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Sản phẩm</th>
+                    <td>
+                        <table class="table table-borderless">
+                            <thead>
+                                <th>Tên sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                            </thead>
+                            <tbody>
+                                <tr th:each="detail : ${order.orderDetails}">
+                                    <td th:text="${detail.productName}"></td>
+                                    <td><span th:text="${#numbers.formatDecimal(detail.productPrice, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                                    <td th:text="${detail.quantity}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Tổng tiền</th>
+                    <td><span th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                </tr>
+                <tr>
+                    <th scope="row">Trạng thái</th>
+                    <td class="status-text" th:text="${order.status}"></td>
+                </tr>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button th:if="${order.status.equals('Đang giao hàng') || order.status.equals('Chờ xác nhận')}" type="button" class="btn btn-danger status-btn"
+                        th:data-order="${order.id}"
+                        data-bs-toggle="modal" data-bs-target="#statusModal"
+                >Hủy đơn hàng</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="statusModalLabel">Hủy đơn hàng</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc là muốn hủy đơn hàng này?
+                </div>
+                <div class="modal-footer">
+                    <button id="changeStatusBtn" type="button" class="btn btn-danger">Hủy đơn hàng</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".status-btn").click(function () {
+            const orderId = $(this).data("order");
+            $("#changeStatusBtn").click(() => {
+                fetch(`/api/order/canceled/${orderId}`, { method: "PUT" })
+                    .then(res => {
+                        if (res.ok) {
+                            $(this).closest(".card").find(".status-text").text("Đã hủy");
+                            $(this).remove();
+                            $("#statusModal").modal("hide");
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>
