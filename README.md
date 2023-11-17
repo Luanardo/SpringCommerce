@@ -7,7 +7,9 @@
 ## Cấu trúc dự án
 
 ## Các bước để chạy dự án
-1. Tạo một schema mới trong MySQL với tên springcommerce.
-2. Import file data.sql vào schema vừa tạo.
-3. Thay đổi các thông tin URL, user, password trong application.properties (nếu cần thiết).
+1. Tạo một schema mới trong `MySQL` có tên `springcommerce` và Default Charset là `utf8`.
+2. Import file `data.sql` vào schema vừa tạo.
+3. Thay đổi các thông tin `spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password` trong `application.properties` (nếu cần thiết), trong đó:
+  - `spring.datasource.url` là đường dẫn đến schema trong `MySQL`.
+  - `spring.datasource.username`, `spring.datasource.password` là username và password của user có schema `springcommerce`
 4. 
