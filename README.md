@@ -14,6 +14,10 @@ Cấu trúc dự án được chia thành nhiều package
 
 ![image](https://github.com/Luanardo/SpringCommerce/assets/122257380/bdfeada6-cf6c-469d-bf3a-185a151cd5a3)
 
+Thư mục productImages trong thư mục public chứa các hình ảnh của sản phẩm
+
+![image](https://github.com/Luanardo/SpringCommerce/assets/122257380/043fab95-e74a-42f1-bde4-5193423b9d16)
+
 - Package `api` chứa các endpoint cho các API mà dự án cung cấp
 - Package `config` chứa các file cấu hình cho Spring Security và JWT
 - Package `controller` chứa các endpoint cho các request từ trình duyệt
@@ -33,12 +37,18 @@ Cấu trúc dự án được chia thành nhiều package
 
 ![image](https://github.com/Luanardo/SpringCommerce/assets/122257380/98d09a4a-39da-4622-a548-5cb7e0975058)
 
+Thư mục `resources` có các thư mục: 
+- `static` chứa các file css và javascipt cho template của dự án.
+- `templates` chứa các file html để hiển thị lên trang web.
+
+![image](https://github.com/Luanardo/SpringCommerce/assets/122257380/6e5ab6a5-c3b8-4b50-83c9-9a3c9cabf072)
+
 ## Các bước để chạy dự án
 1. Tạo một schema mới trong `MySQL` có tên `springcommerce` với Default Charset là `utf8`.
 2. Import file `data.sql` vào schema vừa tạo.
-3. Thay đổi các thông tin `spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password` trong `application.properties` nếu cần thiết, trong đó:
-- `spring.datasource.url` là đường dẫn đến schema trong `MySQL`.
-- `spring.datasource.username`, `spring.datasource.password` là username và password của user dùng để kết nối đến schema `springcommerce`.
+3. Thay đổi các thông tin `spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password` trong file `application.properties` nếu cần thiết, trong đó:
+    - `spring.datasource.url` là đường dẫn đến schema trong `MySQL`.
+    - `spring.datasource.username`, `spring.datasource.password` là username và password của user dùng để kết nối đến schema `springcommerce`.
 4. Chạy file `MidtermApplication.java`.
 5. Truy cập vào đường dẫn http://localhost:8080/ trên trình duyệt
 
