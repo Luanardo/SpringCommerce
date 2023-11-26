@@ -37,9 +37,8 @@ public class HomeController {
     private IOrderService orderService;
 
     @GetMapping
-    public String homePage(Model model, HttpSession session, Principal principal) {
+    public String homePage(Model model, Principal principal) {
         List<ProductDTO> productDTOList = productService.getAll();
-//        String email = (String) session.getAttribute("email");
         if (principal != null) {
             String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
             model.addAttribute("cartQuantity", customerService.sumCartQuantity(email));
@@ -52,10 +51,9 @@ public class HomeController {
     }
 
     @GetMapping("/{id}")
-    public String productDetail(Model model, HttpSession session, Principal principal, @PathVariable("id") Long id) {
+    public String productDetail(Model model, Principal principal, @PathVariable("id") Long id) {
         ProductDTO productDTO = productService.getOne(id);
         GradeDTO gradeDTO = gradeService.getOne(productDTO.getGrade());
-//        String email = (String) session.getAttribute("email");
         if (principal != null) {
             String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
             model.addAttribute("cartQuantity", customerService.sumCartQuantity(email));
@@ -68,10 +66,10 @@ public class HomeController {
     }
 
     @GetMapping("/cart")
-    public String cartPage(Model model, HttpSession session, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+    public String cartPage(Model model, Principal principal) {
+//        if (principal == null) {
+//            return "redirect:/login";
+//        }
         String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
         List<CartResDTO> cartResDTOList = cartService.getAllByCustomer(email);
         double total = 0;
@@ -87,10 +85,10 @@ public class HomeController {
     }
 
     @GetMapping("/orders")
-    public String ordersPage(Model model, HttpSession session, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+    public String ordersPage(Model model, Principal principal) {
+//        if (principal == null) {
+//            return "redirect:/login";
+//        }
         String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
         List<OrderResDTO> orderDTOList = orderService.getAll(email);
         model.addAttribute("cartQuantity", customerService.sumCartQuantity(email));

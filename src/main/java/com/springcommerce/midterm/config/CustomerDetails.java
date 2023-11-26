@@ -6,13 +6,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomerDetails implements UserDetails {
 
     private Customer customer;
-    List<SimpleGrantedAuthority> authorities=null;
+    List<SimpleGrantedAuthority> authorities;
     public Customer getUser() {
         return customer;
     }
@@ -26,12 +28,20 @@ public class CustomerDetails implements UserDetails {
         this.authorities = authorities;
     }
 
+    public CustomerDetails(Customer customer) {
+        this.customer = customer;
+        authorities = customer.getRoles()
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (String role : customer.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-        }
+//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//        authorities.add(new SimpleGrantedAuthority(customer.getRole()));
+
         return authorities;
     }
 

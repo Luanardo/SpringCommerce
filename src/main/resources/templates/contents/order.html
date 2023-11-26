@@ -8,6 +8,9 @@
 <body>
 <div class="container mt-3 mb-3" th:fragment="content">
     <h2 class="text-center mb-5">Danh sách đơn hàng</h2>
+    <div th:if="${orders.size() == 0}">
+        Bạn chưa có đơn hàng nào
+    </div>
     <div>
         <div th:each="order : ${orders}" class="card mb-4 p-4">
             <table class="table">
